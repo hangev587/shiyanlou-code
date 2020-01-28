@@ -4,7 +4,8 @@
 from werkzeug import generate_password_hash, check_password_hash
 
 class Permission:
-    '''用户身份类，每个用户在创建的时候都会有对应的身份和权限
+    '''
+    用户身份类，每个用户在创建的时候都会有对应的身份和权限
     '''
 
     ROLE_USER = 10        # 普通用户
@@ -13,12 +14,18 @@ class Permission:
 
 
 class User:
-    ''' 该类用于创建用户账号
+    '''
+    该类用于创建用户账号
     '''
 
     # 初始化方法中需要定义用户的身份
     # TODO 默认用户身份为普通用户
-    def __init__(self,
+    def __init__(self, name, email, password, permission = Permission.ROLE_USER):
+        self.name = name
+        self.email = email
+        self._password = self.save_password(password)
+        self._permission = permission
+        pass
 
     # 创建哈希密码，该方法前一个挑战已完成，本次挑战不涉及
     def save_password(self, password):
@@ -30,8 +37,15 @@ class User:
 
     # TODO 定义 is_admin 方法判断用户是否具有管理员权限，参考下面 main 中的使用
     # 要求该方法可以像调用属性一样调用（使用 property 装饰器）
+    @property
+    def is_admin(self):
+        return self._permission == Permission.ROLE_ADMIN
 
     # TODO 定义修改用户角色的方法 change_role，参考下面 main 中的使用
+    def change_role(self, permission):
+        self._permission = permission
+        pass
+
 
 # 该方法用于验证大家补充的代码功能是否能够正常使用
 def main():
@@ -52,3 +66,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
